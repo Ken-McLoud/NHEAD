@@ -133,3 +133,13 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+
+CACHES = {
+    "default": {
+        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
+        "LOCATION": [
+            "172.19.26.240:11211",
+            "172.19.26.242:11211",
+        ],
+    }
+}
