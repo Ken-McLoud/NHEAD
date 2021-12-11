@@ -42,6 +42,8 @@ INSTALLED_APPS = [
     "crispy_forms",
     "debug_toolbar",
     "django_extensions",
+    "simple_history",
+    "easyaudit",
     "base_app.apps.BaseAppConfig",
 ]
 
@@ -55,6 +57,8 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "nhead.middleware.securemiddleware.set_secure_headers",
+    "simple_history.middleware.HistoryRequestMiddleware",
+    "easyaudit.middleware.easyaudit.EasyAuditMiddleware",
 ]
 
 ROOT_URLCONF = "nhead.urls"
