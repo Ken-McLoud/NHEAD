@@ -49,6 +49,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "nhead.middleware.securemiddleware.set_secure_headers",
 ]
 
 ROOT_URLCONF = "nhead.urls"
