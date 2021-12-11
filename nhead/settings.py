@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "crispy_forms",
     "debug_toolbar",
+    "django_extensions",
     "base_app.apps.BaseAppConfig",
 ]
 
