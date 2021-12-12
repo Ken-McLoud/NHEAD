@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     "simple_history",
     "easyaudit",
     "base_app.apps.BaseAppConfig",
+    "autocrud.apps.AutocrudConfig",
 ]
 
 MIDDLEWARE = [
