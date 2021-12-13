@@ -19,7 +19,7 @@ import debug_toolbar
 
 
 urlpatterns = [
-    path("admin_page/", admin.site.urls),
+    path("adminpage/", admin.site.urls),
     path("__debug__/", include(debug_toolbar.urls)),
-    path("", include("base_app.urls")),
+    path("", include(("base_app.urls", "base_app"), namespace="base_app")),
 ]

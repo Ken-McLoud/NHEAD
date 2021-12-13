@@ -3,4 +3,4 @@ from django.http import HttpResponse
 
 
 def home(request):
-    return HttpResponse("hello world")
+    return render(request, "base_app/base.html", context={"message": "hellos worlds"})
