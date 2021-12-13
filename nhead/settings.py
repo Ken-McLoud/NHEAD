@@ -143,11 +143,8 @@ INTERNAL_IPS = [
 
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.memcached.PyMemcacheCache",
-        "LOCATION": [
-            "172.19.26.240:11211",
-            "172.19.26.242:11211",
-        ],
+        "BACKEND": "django.core.cache.backends.memcached.MemcachedCache",
+        "LOCATION": "127.0.0.1:11211",
     }
 }
 

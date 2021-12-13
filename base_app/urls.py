@@ -34,6 +34,7 @@ urlpatterns = [
         auth_views.PasswordResetConfirmView.as_view(
             template_name="base_app/password_reset_confirm.html",
             success_url=reverse_lazy("base_app:password_reset_complete"),
+            post_reset_login=True,
         ),
         name="password_reset_confirm",
     ),
