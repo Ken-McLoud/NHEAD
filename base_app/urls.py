@@ -45,5 +45,6 @@ urlpatterns = [
         ),
         name="password_reset_complete",
     ),
+    path("accounts/create_user", views.create_user_view, name="create_user"),
     path("accounts/", include("django.contrib.auth.urls")),
 ]
