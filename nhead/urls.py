@@ -22,4 +22,5 @@ urlpatterns = [
     path("adminpage/", admin.site.urls),
     path("__debug__/", include(debug_toolbar.urls)),
     path("", include(("base_app.urls", "base_app"), namespace="base_app")),
+    path("records/", include(("records.urls", "records"), namespace="records")),
 ]

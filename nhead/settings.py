@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "easyaudit",
     "base_app.apps.BaseAppConfig",
     "autocrud.apps.AutocrudConfig",
+    "records.apps.RecordsConfig",
 ]
 
 MIDDLEWARE = [

@@ -1,0 +1,21 @@
+{% load base_app_extras %}
+<div class="pagination float-right">
+    <span style="margin-right:20px; white-space: nowrap;">
+        ({{page_obj.paginator.count}} total results)
+    </span>
+    <span class="step-links" style="white-space: nowrap;">
+        {% if page_obj.has_previous %}
+            <a href="?{% url_replace page=1 %}"><i class="fas fa-angle-double-left" style="margin-right:20px;"></i> </a>
+            <a href="?{% url_replace page=page_obj.previous_page_number %}"><i class="fas fa-angle-left" style="margin-right:10px;"></i></a>
+        {% endif %}
+
+        <span class="current">
+            Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+        </span>
+
+        {% if page_obj.has_next %}
+            <a href="?{% url_replace page=page_obj.next_page_number %}"><i class="fas fa-angle-right" style="margin-left:10px;"></i></a>
+            <a href="?{% url_replace page=page_obj.paginator.num_pages %}"><i class="fas fa-angle-double-right" style="margin-left:20px;"></i></a>
+        {% endif %}
+    </span>
+</div>

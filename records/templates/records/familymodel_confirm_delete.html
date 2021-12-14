@@ -1,0 +1,94 @@
+{% extends "base_app/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %} {{page_title}} {% endblock %}
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block content %}
+
+	<div class="content">
+		<div class="page-inner">
+			<div class="page-header">
+				<h4 class="page-title">Delete {{model_name|title}} id:{{object.pk}} </h4>
+				<ul class="breadcrumbs">
+					<li class="nav-home">
+						<a href="#">
+							<i class="flaticon-home"></i>
+						</a>
+					</li>
+					<li class="separator">
+						<i class="flaticon-right-arrow"></i>
+					</li>
+					<li class="nav-item">
+						<a href="#">{{app_name}}</a>
+					</li>
+                    <li class="separator">
+						<i class="flaticon-right-arrow"></i>
+					</li>
+					<li class="nav-item">
+						<a href="{% url list_view_url %}">{{model_name|title}}</a>
+					</li>
+                    <li class="separator">
+						<i class="flaticon-right-arrow"></i>
+					</li>
+					<li class="nav-item">
+						<a href="#">Delete {{model_name|title}} id:{{object.pk}}</a>
+					</li>
+				</ul>
+			</div>
+			{% if background %}
+			<div class="row">
+				<div class="col-xl-3 col-lg-6">
+                    <div class="card">
+						<div class="card-header">
+							<div class="card-title">
+								<h3>{{background.title|title}}</h3>
+							</div>
+						</div>
+                        <div class="card-body">
+							<div class="table-responsive">
+								<table class="table tabble-hover table-head-bg-primary">
+										<tbody>
+											{% for key,value in background.data.items %}
+												<tr>
+													<td>
+														{{key}}
+													</td>
+													<td>{{value}}</td>
+												</tr>
+											{% endfor %}
+										</tbody>
+								</table>
+							</div>
+                    	</div>
+                	</div>
+					<div class="col-xl-3 col-lg-6">
+					</div>
+				</div>
+			</div>
+			{% endif %}
+            <div class="row">
+				<div class="col-xl-3 col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                            <form method="post">{% csrf_token %}
+								<p>Are you sure you want to delete "{{ object }}"?</p>
+								<input type="submit" value="Confirm">
+							</form>
+                    	</div>
+                	</div>
+                <div class="col-xl-3 col-lg-6">
+                </div>
+            </div>
+		</div>
+	</div>
+	</div>
+
+{% endblock content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+{% endblock javascripts %}
