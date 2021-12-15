@@ -30,6 +30,10 @@ def create_user_view(request):
         form = CreateUserForm()
     return render(
         request,
-        "base_app/form_template.html",
+        "accounts/register.html",
         {"form": form, "title": "Create New Account"},
     )
+
+
+def testview(request):
+    return render(request, "base_app/non_crispy_form.html")

@@ -8,7 +8,7 @@ urlpatterns = [
     path(
         "accounts/login/",
         auth_views.LoginView.as_view(
-            template_name="base_app/login.html",
+            template_name="accounts/login.html",
         ),
         name="login",
     ),
@@ -46,5 +46,6 @@ urlpatterns = [
         name="password_reset_complete",
     ),
     path("accounts/create_user", views.create_user_view, name="create_user"),
+    path("test", views.testview, name="test"),
     path("accounts/", include("django.contrib.auth.urls")),
 ]
