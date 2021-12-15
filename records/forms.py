@@ -4,6 +4,7 @@ from .models import FamilyModel
 from crispy_forms.helper import FormHelper
 from django.forms import ModelForm
 from django.core.exceptions import ValidationError
+from django import forms
 
 
 # added by autocrud
@@ -12,7 +13,7 @@ class FamilyForm(ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "post"
-        self.helper.layout = Layout(Fieldset("", "name", "zip_code"))
+        self.helper.layout = Layout(Fieldset("", "name", "zip_code", "user"))
         self.helper.layout.append(FormActions(Submit("done", "Done")))
 
     def clean_zip_code(self):
@@ -25,4 +26,5 @@ class FamilyForm(ModelForm):
 
     class Meta:
         model = FamilyModel
-        fields = ["name", "zip_code"]
+        fields = ["name", "zip_code", "user"]
+        widgets = {"user": forms.HiddenInput()}

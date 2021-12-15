@@ -5,7 +5,7 @@ from django.views.generic import DetailView
 from django.urls import reverse_lazy
 from .forms import FamilyForm
 from .models import FamilyModel
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.views.generic.edit import CreateView
 from django.shortcuts import render
 
@@ -14,7 +14,7 @@ from django.shortcuts import render
 
 # added by autocrud
 class CreateFamilyView(LoginRequiredMixin, CreateView):
-    login_url = "/login"
+    login_url = "accounts/login"
     model = FamilyModel
     form_class = FamilyForm
 
@@ -25,13 +25,18 @@ class CreateFamilyView(LoginRequiredMixin, CreateView):
         context["breadcrumbs"] = ["Create a new Family"]
         return context
 
+    def get_initial(self):
+        initial = super().get_initial()
+        initial["user"] = self.request.user
+        return initial
+
     def get_success_url(self):
         return reverse_lazy("records:familymodel", kwargs={"pk": self.object.pk})
 
 
 # added by autocrud
 class DetailFamilyView(LoginRequiredMixin, DetailView):
-    login_url = "/login"
+    login_url = "accounts/login"
     model = FamilyModel
 
     def get_context_data(self, object):
@@ -44,7 +49,7 @@ class DetailFamilyView(LoginRequiredMixin, DetailView):
 
 # added by autocrud
 class ListFamilyView(LoginRequiredMixin, ListView):
-    login_url = "/login"
+    login_url = "accounts/login"
     model = FamilyModel
     paginate_by = 20
     queryset = FamilyModel.objects.all().order_by("pk")
@@ -79,10 +84,13 @@ class ListFamilyView(LoginRequiredMixin, ListView):
 
 
 # added by autocrud
-class EditFamilyView(LoginRequiredMixin, UpdateView):
-    login_url = "/login"
+class EditFamilyView(UserPassesTestMixin, UpdateView):
+    login_url = "accounts/login"
     model = FamilyModel
     form_class = FamilyForm
+
+    def test_func(self):
+        return self.request.user == self.get_object().user
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
@@ -95,10 +103,13 @@ class EditFamilyView(LoginRequiredMixin, UpdateView):
 
 
 # added by autocrud
-class DeleteFamilyView(LoginRequiredMixin, DeleteView):
-    login_url = "/login"
+class DeleteFamilyView(UserPassesTestMixin, DeleteView):
+    login_url = "accounts/login"
     model = FamilyModel
     success_url = reverse_lazy("records:familymodels")
+
+    def test_func(self):
+        return self.request.user == self.get_object().user
 
     def get_context_data(self, object):
         context = super().get_context_data()
