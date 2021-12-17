@@ -1,3 +1,5 @@
+from .forms import KidForm
+from .models import KidModel
 from django.views.generic import DeleteView
 from django.views.generic import UpdateView
 from django.views.generic import ListView
@@ -18,7 +20,7 @@ class CreateFamilyView(LoginRequiredMixin, CreateView):
     model = FamilyModel
     form_class = FamilyForm
 
-    def get_context_data(self):
+    def get_context_data(self, *args, **kwargs):
         context = super().get_context_data()
         context["page_title"] = "Create a new Family"
         context["app_name"] = "records"
@@ -31,7 +33,7 @@ class CreateFamilyView(LoginRequiredMixin, CreateView):
         return initial
 
     def get_success_url(self):
-        return reverse_lazy("records:familymodel", kwargs={"pk": self.object.pk})
+        return reverse_lazy("records:createkid")
 
 
 # added by autocrud
@@ -116,4 +118,100 @@ class DeleteFamilyView(UserPassesTestMixin, DeleteView):
         context["model_name"] = "Family"
         context["app_name"] = "records"
         context["list_view_url"] = "records:familymodels"
+        return context
+
+
+# added by autocrud
+class CreateKidView(LoginRequiredMixin, CreateView):
+    login_url = "/login"
+    model = KidModel
+    form_class = KidForm
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        context["page_title"] = "Create a new Kid"
+        context["app_name"] = "records"
+        context["breadcrumbs"] = ["Create a new Kid"]
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy("records:kidmodel", kwargs={"pk": self.object.pk})
+
+
+# added by autocrud
+class DetailKidView(LoginRequiredMixin, DetailView):
+    login_url = "/login"
+    model = KidModel
+
+    def get_context_data(self, object):
+        context = super().get_context_data()
+        context["model_name"] = "Kid"
+        context["app_name"] = "records"
+        context["list_view_url"] = "records:kidmodels"
+        return context
+
+
+# added by autocrud
+class ListKidView(LoginRequiredMixin, ListView):
+    login_url = "/login"
+    model = KidModel
+    paginate_by = 20
+    queryset = KidModel.objects.all().order_by("pk")
+
+    def get_context_data(self):
+        context = super().get_context_data()
+        context["model_name"] = "Kid"
+        context["app_name"] = "records"
+        context["detail_url_name"] = "records:kidmodel"
+        context["edit_url_name"] = "records:editkid"
+        context["delete_url_name"] = "records:deletekid"
+        context["fields"] = ["family", "birth_year"]
+        context["header"] = ["ID #"] + context["fields"] + ["", ""]
+        table = []
+        for obj in context["object_list"]:
+            table.append(
+                {
+                    "pk": obj.pk,
+                    "fields": [
+                        self.get_field_value(obj, field) for field in context["fields"]
+                    ],
+                }
+            )
+        context["table"] = table
+        return context
+
+    def get_field_value(self, obj, field_name):
+        for field in obj._meta.fields:
+            if field.name != field_name:
+                continue
+            return field.value_from_object(obj)
+
+
+# added by autocrud
+class EditKidView(LoginRequiredMixin, UpdateView):
+    login_url = "/login"
+    model = KidModel
+    form_class = KidForm
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data()
+        context["model_name"] = "Kid"
+        context["app_name"] = "records"
+        return context
+
+    def get_success_url(self):
+        return reverse_lazy("records:kidmodel", kwargs={"pk": self.object.pk})
+
+
+# added by autocrud
+class DeleteKidView(LoginRequiredMixin, DeleteView):
+    login_url = "/login"
+    model = KidModel
+    success_url = reverse_lazy("records:kidmodels")
+
+    def get_context_data(self, object):
+        context = super().get_context_data()
+        context["model_name"] = "Kid"
+        context["app_name"] = "records"
+        context["list_view_url"] = "records:kidmodels"
         return context

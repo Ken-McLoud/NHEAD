@@ -28,3 +28,25 @@ urlpatterns.append(
 urlpatterns.append(
     path("deletefamily/<int:pk>", views.DeleteFamilyView.as_view(), name="deletefamily")
 )
+
+
+# added by autocrud
+urlpatterns.append(path("createkid", views.CreateKidView.as_view(), name="createkid"))
+
+# added by autocrud
+urlpatterns.append(
+    path("kidmodel/<int:pk>", views.DetailKidView.as_view(), name="kidmodel")
+)
+
+# added by autocrud
+urlpatterns.append(path("kidmodels", views.ListKidView.as_view(), name="kidmodels"))
+
+# added by autocrud
+urlpatterns.append(
+    path("editkid/<int:pk>", views.EditKidView.as_view(), name="editkid")
+)
+
+# added by autocrud
+urlpatterns.append(
+    path("deletekid/<int:pk>", views.DeleteKidView.as_view(), name="deletekid")
+)
