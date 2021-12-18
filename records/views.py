@@ -96,14 +96,22 @@ class EditFamilyView(UserPassesTestMixin, UpdateView):
     login_url = "/accounts/login"
     model = FamilyModel
     form_class = FamilyForm
+    template_name = "records/simple_form.html"
 
     def test_func(self):
         return self.request.user == self.get_object().user
+
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs["btn_text"] = "Done"
+        return kwargs
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()
         context["model_name"] = "Family"
         context["app_name"] = "records"
+        context["header"] = "Modify Your Family Entry"
+        context["sub_header"] = "This will help you connect with other local families"
         return context
 
     def get_success_url(self):
@@ -229,6 +237,7 @@ class EditKidView(LoginRequiredMixin, UpdateView):
     login_url = "/accounts/login"
     model = KidModel
     form_class = KidForm
+    template_name = "records/simple_form.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data()

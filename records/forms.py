@@ -11,6 +11,7 @@ from django import forms
 # added by autocrud
 class FamilyForm(ModelForm):
     def __init__(self, *args, **kwargs):
+        kwargs = self.clean_kwargs(kwargs)
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "post"
@@ -23,8 +24,16 @@ class FamilyForm(ModelForm):
             )
         )
         self.helper.layout.append(
-            Div(FormActions(Submit("done", "Add Kids")), css_class="mt-3")
+            Div(FormActions(Submit("done", self.btn_text)), css_class="mt-3")
         )
+
+    def clean_kwargs(self, kwargs):
+        if "btn_text" in kwargs:
+            self.btn_text = kwargs["btn_text"]
+            del kwargs["btn_text"]
+        else:
+            self.btn_text = "Add kids"
+        return kwargs
 
     def clean_zip_code(self):
         data = self.cleaned_data["zip_code"]
