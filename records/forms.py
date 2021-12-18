@@ -14,17 +14,16 @@ class FamilyForm(ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "post"
-        self.helper.form_class = "mt-4"
         self.helper.layout = Layout(
             Fieldset(
                 "",
-                Div(Field("name", css_class="form-control"), css_class=""),
-                Div(Field("zip_code", css_class="form-control"), css_class="mt-3"),
+                "name",
+                "zip_code",
                 "user",
             )
         )
         self.helper.layout.append(
-            Div(FormActions(Submit("done", "Add Kids")), css_class="d-grid mt-3")
+            Div(FormActions(Submit("done", "Add Kids")), css_class="mt-3")
         )
 
     def clean_zip_code(self):
@@ -51,8 +50,23 @@ class KidForm(ModelForm):
         self.helper = FormHelper()
         self.helper.form_method = "post"
         self.helper.layout = Layout(Fieldset("", "family", "birth_year"))
-        self.helper.layout.append(FormActions(Submit("done", "Done")))
+        self.helper.layout.append(
+            FormActions(
+                HTML(
+                    """
+            <a href="/records/familymodels" class= "btn btn-primary">
+                Done adding kids
+            </a>
+            """
+                ),
+                Submit("add", "Add another kid"),
+                css_class="mt-3",
+            )
+        )
 
     class Meta:
         model = KidModel
         fields = ["family", "birth_year"]
+        widgets = {
+            "family": forms.HiddenInput(),
+        }

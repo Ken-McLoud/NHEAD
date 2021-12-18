@@ -31,7 +31,9 @@ urlpatterns.append(
 
 
 # added by autocrud
-urlpatterns.append(path("createkid", views.CreateKidView.as_view(), name="createkid"))
+urlpatterns.append(
+    path("createkid/<int:family_pk>", views.CreateKidView.as_view(), name="createkid")
+)
 
 # added by autocrud
 urlpatterns.append(

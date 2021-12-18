@@ -153,3 +153,5 @@ LOGIN_REDIRECT_URL = "base_app:home"
 LOGOUT_REDIRECT_URL = "base_app:home"
 
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+CRISPY_TEMPLATE_PACK = "bootstrap4"

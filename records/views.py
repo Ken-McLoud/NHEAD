@@ -16,15 +16,18 @@ from django.shortcuts import render
 
 # added by autocrud
 class CreateFamilyView(LoginRequiredMixin, CreateView):
-    login_url = "accounts/login"
+    login_url = "/accounts/login"
     model = FamilyModel
     form_class = FamilyForm
+    template_name = "records/simple_form.html"
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data()
         context["page_title"] = "Create a new Family"
         context["app_name"] = "records"
         context["breadcrumbs"] = ["Create a new Family"]
+        context["header"] = "Create a Family Entry"
+        context["sub_header"] = "This will help you connect with other local families"
         return context
 
     def get_initial(self):
@@ -33,12 +36,15 @@ class CreateFamilyView(LoginRequiredMixin, CreateView):
         return initial
 
     def get_success_url(self):
-        return reverse_lazy("records:createkid")
+        return reverse_lazy(
+            "records:createkid",
+            kwargs={"family_pk": self.object.pk},
+        )
 
 
 # added by autocrud
 class DetailFamilyView(LoginRequiredMixin, DetailView):
-    login_url = "accounts/login"
+    login_url = "/accounts/login"
     model = FamilyModel
 
     def get_context_data(self, object):
@@ -51,7 +57,7 @@ class DetailFamilyView(LoginRequiredMixin, DetailView):
 
 # added by autocrud
 class ListFamilyView(LoginRequiredMixin, ListView):
-    login_url = "accounts/login"
+    login_url = "/accounts/login"
     model = FamilyModel
     paginate_by = 20
     queryset = FamilyModel.objects.all().order_by("pk")
@@ -87,7 +93,7 @@ class ListFamilyView(LoginRequiredMixin, ListView):
 
 # added by autocrud
 class EditFamilyView(UserPassesTestMixin, UpdateView):
-    login_url = "accounts/login"
+    login_url = "/accounts/login"
     model = FamilyModel
     form_class = FamilyForm
 
@@ -106,7 +112,7 @@ class EditFamilyView(UserPassesTestMixin, UpdateView):
 
 # added by autocrud
 class DeleteFamilyView(UserPassesTestMixin, DeleteView):
-    login_url = "accounts/login"
+    login_url = "/accounts/login"
     model = FamilyModel
     success_url = reverse_lazy("records:familymodels")
 
@@ -123,24 +129,55 @@ class DeleteFamilyView(UserPassesTestMixin, DeleteView):
 
 # added by autocrud
 class CreateKidView(LoginRequiredMixin, CreateView):
-    login_url = "/login"
+    login_url = "/accounts/login"
     model = KidModel
     form_class = KidForm
+    template_name = "records/simple_form.html"
+    ordinals = {
+        1: "first",
+        2: "second",
+        3: "third",
+        4: "fourth",
+        5: "fifth",
+        6: "sixth",
+        7: "seventh",
+        8: "eighth",
+        9: "ninth",
+        10: "tenth",
+    }
+
+    def get_initial(self):
+        initial = super().get_initial()
+        self.family = FamilyModel.objects.get(pk=self.kwargs["family_pk"])
+        initial["family"] = self.family
+        return initial
 
     def get_context_data(self):
         context = super().get_context_data()
         context["page_title"] = "Create a new Kid"
         context["app_name"] = "records"
         context["breadcrumbs"] = ["Create a new Kid"]
+        kid_num = self.family.kidmodel_set.all().count() + 1
+        context["header"] = f"Tell us about your {self.ordinals[kid_num]} kid"
+        context["sub_header"] = "This will help you connect with other local families"
         return context
 
+    def form_valid(self, form):
+        print(form.cleaned_data)
+        # self.button=form.cleaned_data['done']
+        # print(self.button)
+        return super().form_valid(form)
+
     def get_success_url(self):
-        return reverse_lazy("records:kidmodel", kwargs={"pk": self.object.pk})
+        return reverse_lazy(
+            "records:createkid",
+            kwargs={"family_pk": self.family.pk},
+        )
 
 
 # added by autocrud
 class DetailKidView(LoginRequiredMixin, DetailView):
-    login_url = "/login"
+    login_url = "/accounts/login"
     model = KidModel
 
     def get_context_data(self, object):
@@ -153,7 +190,7 @@ class DetailKidView(LoginRequiredMixin, DetailView):
 
 # added by autocrud
 class ListKidView(LoginRequiredMixin, ListView):
-    login_url = "/login"
+    login_url = "/accounts/login"
     model = KidModel
     paginate_by = 20
     queryset = KidModel.objects.all().order_by("pk")
@@ -189,7 +226,7 @@ class ListKidView(LoginRequiredMixin, ListView):
 
 # added by autocrud
 class EditKidView(LoginRequiredMixin, UpdateView):
-    login_url = "/login"
+    login_url = "/accounts/login"
     model = KidModel
     form_class = KidForm
 
@@ -205,7 +242,7 @@ class EditKidView(LoginRequiredMixin, UpdateView):
 
 # added by autocrud
 class DeleteKidView(LoginRequiredMixin, DeleteView):
-    login_url = "/login"
+    login_url = "/accounts/login"
     model = KidModel
     success_url = reverse_lazy("records:kidmodels")
 
