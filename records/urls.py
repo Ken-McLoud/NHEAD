@@ -52,3 +52,8 @@ urlpatterns.append(
 urlpatterns.append(
     path("deletekid/<int:pk>", views.DeleteKidView.as_view(), name="deletekid")
 )
+
+# added by autocrud
+urlpatterns.append(path("myfamily/", views.MyFamilyView.as_view(), name="myfamily"))
+
+urlpatterns.append(path("test/", views.testview, name="test"))

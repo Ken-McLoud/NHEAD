@@ -1,3 +1,6 @@
+from django.http import request
+from django.http.response import HttpResponse
+from django.views.generic.base import RedirectView
 from .forms import KidForm
 from .models import KidModel
 from django.views.generic import DeleteView
@@ -52,6 +55,9 @@ class DetailFamilyView(LoginRequiredMixin, DetailView):
         context["model_name"] = "Family"
         context["app_name"] = "records"
         context["list_view_url"] = "records:familymodels"
+        context["header"] = f"{object.name} Family"
+        context["sub_header"] = "Details"
+        context["kids"] = KidModel.objects.filter(family=object)
         return context
 
 
@@ -171,12 +177,13 @@ class CreateKidView(LoginRequiredMixin, CreateView):
         return context
 
     def form_valid(self, form):
+        self.done = "done" in self.request.POST
         print(form.cleaned_data)
-        # self.button=form.cleaned_data['done']
-        # print(self.button)
         return super().form_valid(form)
 
     def get_success_url(self):
+        if self.done:
+            return reverse_lazy("records:familymodels")
         return reverse_lazy(
             "records:createkid",
             kwargs={"family_pk": self.family.pk},
@@ -260,4 +267,19 @@ class DeleteKidView(LoginRequiredMixin, DeleteView):
         context["model_name"] = "Kid"
         context["app_name"] = "records"
         context["list_view_url"] = "records:kidmodels"
+
         return context
+
+
+def testview(http_request):
+    return HttpResponse("<h1>hello</h1>")
+
+
+class MyFamilyView(LoginRequiredMixin, RedirectView):
+    permanent = False
+    query_string = True
+    login_url = "/accounts/login"
+
+    def get_redirect_url(self, *args, **kwargs):
+        family = FamilyModel.objects.get(user=self.request.user)
+        return reverse_lazy("records:familymodel", kwargs={"pk": family.pk})

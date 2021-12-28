@@ -22,12 +22,17 @@ class FamilyModel(models.Model):
 
 
 class KidModel(models.Model):
+    genders = (("boy", "Boy"), ("girl", "Girl"))
     family = models.ForeignKey(FamilyModel, on_delete=PROTECT, null=False)
     birth_year = models.IntegerField(
         validators=[MinValueValidator(2000), MaxValueValidator(2100)],
         null=False,
     )
+    gender = models.CharField(max_length=10, choices=genders, null=True)
+
+    @property
+    def age(self):
+        return datetime.date.today().year - self.birth_year
 
     def __str__(self):
-        yr = datetime.date.today().year - self.birth_year
-        return f"{yr}yr old child in {self.family.name} family"
+        return f"{self.age}yr old child in {self.family.name} family"

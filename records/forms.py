@@ -58,24 +58,23 @@ class KidForm(ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "post"
-        self.helper.layout = Layout(Fieldset("", "family", "birth_year"))
+        self.helper.layout = Layout(Fieldset("", "family", "birth_year", "gender"))
         self.helper.layout.append(
             FormActions(
+                Submit("add", "Add another kid"),
                 HTML(
                     """
-            <a href="/records/familymodels" class= "btn btn-primary">
-                Done adding kids
-            </a>
-            """
+                <a href="/records/myfamily" class="btn btn-primary">Done adding kids</a>
+                """
                 ),
-                Submit("add", "Add another kid"),
                 css_class="mt-3",
             )
         )
+        self.fields["gender"].required = False
 
     class Meta:
         model = KidModel
-        fields = ["family", "birth_year"]
+        fields = ["family", "birth_year", "gender"]
         widgets = {
             "family": forms.HiddenInput(),
         }
