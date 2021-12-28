@@ -56,4 +56,6 @@ urlpatterns.append(
 # added by autocrud
 urlpatterns.append(path("myfamily/", views.MyFamilyView.as_view(), name="myfamily"))
 
-urlpatterns.append(path("test/", views.testview, name="test"))
+urlpatterns.append(
+    path("inline_add_kid/<int:family_pk>", views.testview, name="inline_add_kid")
+)

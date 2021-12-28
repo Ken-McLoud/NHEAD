@@ -1,0 +1,23 @@
+{% load crispy_forms_tags %}
+
+
+<!-- Specific Page CSS goes HERE  -->
+{% block stylesheets %}{% endblock stylesheets %}
+
+{% block inner-content %}
+	<div class="card border-0 p-2 p-md-3 p-lg-5">
+		<div class="card-header bg-white border-0 text-center">
+			<h2>{{header}}</h2>
+			<p>{{sub_header}}</p>
+		</div>
+		<div class="card-body px-0 pt-0 text-left">
+			{% crispy form %}
+		</div>
+	</div>
+
+{% endblock inner-content %}
+
+<!-- Specific Page JS goes HERE  -->
+{% block javascripts %}
+
+{% endblock javascripts %}

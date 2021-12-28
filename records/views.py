@@ -271,8 +271,12 @@ class DeleteKidView(LoginRequiredMixin, DeleteView):
         return context
 
 
-def testview(http_request):
-    return HttpResponse("<h1>hello</h1>")
+def testview(http_request, family_pk):
+    context = {
+        "form": KidForm(initial={"family": FamilyModel.objects.get(pk=family_pk)}),
+        "header": "New Kid:",
+    }
+    return render(http_request, "records/inline_form.html", context=context)
 
 
 class MyFamilyView(LoginRequiredMixin, RedirectView):

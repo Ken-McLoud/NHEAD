@@ -58,6 +58,7 @@ class KidForm(ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "post"
+        self.helper.form_action = "records:createkid"
         self.helper.layout = Layout(Fieldset("", "family", "birth_year", "gender"))
         self.helper.layout.append(
             FormActions(

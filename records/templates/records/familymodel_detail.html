@@ -39,7 +39,7 @@
 							<li class="list-item pb-3">{{kid.age}}yr old {{kid.gender|default:""}}</li>
 						{% endfor %}
 					</ul>
-					<div class="d-grid"><a hx-get="/records/test/" class="btn btn-primary animate-up-1">Purchase now</a></div>
+					<div class="d-grid"><a hx-get="{% url 'records:inline_add_kid' family_pk=object.pk  %}" hx-swap="outerHTML" class="btn btn-primary animate-up-1">Add A Kid</a></div>
 				</div>
 				<!-- End Content -->
 			</div>
