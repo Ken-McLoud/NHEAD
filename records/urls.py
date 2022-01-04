@@ -20,9 +20,7 @@ urlpatterns.append(
 )
 
 # added by autocrud
-urlpatterns.append(
-    path("editfamily/<int:pk>", views.EditFamilyView.as_view(), name="editfamily")
-)
+urlpatterns.append(path("editfamily/<int:pk>", views.editfamilyview, name="editfamily"))
 
 # added by autocrud
 urlpatterns.append(
@@ -55,5 +53,13 @@ urlpatterns.append(
 urlpatterns.append(path("myfamily/", views.MyFamilyView.as_view(), name="myfamily"))
 
 urlpatterns.append(
-    path("inline_add_kid/<int:family_pk>", views.testview, name="inline_add_kid")
+    path("inline_add_kid/<int:family_pk>", views.inline_add_kid, name="inline_add_kid")
+)
+
+urlpatterns.append(
+    path(
+        "inline_edit_family/<int:family_pk>",
+        views.inline_edit_family,
+        name="inline_edit_family",
+    )
 )

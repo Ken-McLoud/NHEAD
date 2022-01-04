@@ -1,5 +1,6 @@
 from django.http import request
 from django.http.response import HttpResponse
+from django.utils.html import conditional_escape
 from django.views.generic.base import RedirectView
 from .forms import KidForm
 from .models import KidModel
@@ -151,6 +152,15 @@ def createkidview(http_request):
     return redirect("records:myfamily")
 
 
+@login_required(login_url="/accounts/login")
+def editfamilyview(http_request, pk):
+    family = FamilyModel.objects.get(pk=pk)
+    form = FamilyForm(http_request.POST, family_pk=pk, instance=family)
+    if form.is_valid():
+        form.save()
+    return redirect("records:myfamily")
+
+
 # added by autocrud
 class DetailKidView(LoginRequiredMixin, DetailView):
     login_url = "/accounts/login"
@@ -232,10 +242,26 @@ class DeleteKidView(LoginRequiredMixin, DeleteView):
         return context
 
 
-def testview(http_request, family_pk):
+def inline_add_kid(http_request, family_pk):
     context = {
         "form": KidForm(initial={"family": FamilyModel.objects.get(pk=family_pk)}),
         "header": "New Kid:",
+    }
+    return render(http_request, "records/inline_form.html", context=context)
+
+
+def inline_edit_family(http_request, family_pk):
+    family = FamilyModel.objects.get(pk=family_pk)
+    context = {
+        "form": FamilyForm(
+            initial={
+                "name": family.name,
+                "zip_code": family.zip_code,
+                "user": family.user,
+            },
+            family_pk=family.pk,
+        ),
+        "header": "Edit Family:",
     }
     return render(http_request, "records/inline_form.html", context=context)
 

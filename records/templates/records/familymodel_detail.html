@@ -16,7 +16,7 @@
 		<div class="col-12 mb-5 mb-lg-0">
 			<div class="card shadow text-center">
 				<!-- Header -->
-				<div class="card-header bg-white p-3">
+				<div class="card-header bg-white p-3" hx-get="{% url 'records:inline_edit_family' family_pk=object.pk  %}" hx-swap="outerHTML">
 					<div class="table-responsive-sm">
 						<table class="table table-hover">
 							<tr>
@@ -29,6 +29,7 @@
 							</tr>
 						</table>
 					</div>
+					<div class="d-grid"><a class="btn btn-primary animate-up-1">Edit <span class="fas fa-edit"></span></a></div>
 				</div>
 				<!-- End Header -->
 				<!-- Content -->

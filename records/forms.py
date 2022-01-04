@@ -1,3 +1,4 @@
+from django.urls.base import reverse_lazy
 from .models import KidModel
 from crispy_forms.bootstrap import FormActions
 from crispy_forms.layout import HTML, Div, Field, Submit, Layout, Fieldset
@@ -15,6 +16,11 @@ class FamilyForm(ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.form_method = "post"
+        if self.has_family_pk:
+            self.helper.form_action = reverse_lazy(
+                "records:editfamily",
+                kwargs={"pk": self.family_pk},
+            )
         self.helper.layout = Layout(
             Fieldset(
                 "",
@@ -32,7 +38,13 @@ class FamilyForm(ModelForm):
             self.btn_text = kwargs["btn_text"]
             del kwargs["btn_text"]
         else:
-            self.btn_text = "Add kids"
+            self.btn_text = "Done"
+        if "family_pk" in kwargs:
+            self.family_pk = kwargs["family_pk"]
+            del kwargs["family_pk"]
+            self.has_family_pk = True
+        else:
+            self.has_family_pk = False
         return kwargs
 
     def clean_zip_code(self):
@@ -73,17 +85,6 @@ class KidForm(ModelForm):
             )
         )
         self.fields["gender"].required = False
-
-    """
-    def save(self):
-        super().save()
-        obj=KidModel.objects.create(
-            family=self.cleaned_data['family'],
-            birth_year= self.cleaned_data['birth_year'],
-            gender=self.cleaned_data['gender'],
-        )
-        print(obj)
-    """
 
     class Meta:
         model = KidModel
