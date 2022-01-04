@@ -54,6 +54,12 @@ class FamilyForm(ModelForm):
 
 # added by autocrud
 class KidForm(ModelForm):
+    form_type = forms.CharField(
+        max_length=200,
+        widget=forms.HiddenInput(),
+        required=False,
+    )
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
@@ -62,16 +68,22 @@ class KidForm(ModelForm):
         self.helper.layout = Layout(Fieldset("", "family", "birth_year", "gender"))
         self.helper.layout.append(
             FormActions(
-                Submit("add", "Add another kid"),
-                HTML(
-                    """
-                <a href="/records/myfamily" class="btn btn-primary">Done adding kids</a>
-                """
-                ),
+                Submit("done", "Done"),
                 css_class="mt-3",
             )
         )
         self.fields["gender"].required = False
+
+    """
+    def save(self):
+        super().save()
+        obj=KidModel.objects.create(
+            family=self.cleaned_data['family'],
+            birth_year= self.cleaned_data['birth_year'],
+            gender=self.cleaned_data['gender'],
+        )
+        print(obj)
+    """
 
     class Meta:
         model = KidModel

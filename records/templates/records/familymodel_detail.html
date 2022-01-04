@@ -36,7 +36,12 @@
 					<h2>Children</h2>
 					<ul class="list-unstyled mb-4">
 						{% for kid in kids %}
-							<li class="list-item pb-3">{{kid.age}}yr old {{kid.gender|default:""}}</li>
+							<li class="list-item pb-3">
+								{{kid.age}}yr old {{kid.gender|default:""}}
+								<a href="{% url 'records:deletekid' pk=kid.pk %}">
+									<span class="fas fa-trash mx-5"></span>
+								</a>
+							</li>
 						{% endfor %}
 					</ul>
 					<div class="d-grid"><a hx-get="{% url 'records:inline_add_kid' family_pk=object.pk  %}" hx-swap="outerHTML" class="btn btn-primary animate-up-1">Add A Kid</a></div>
@@ -45,6 +50,8 @@
 			</div>
 		</div>
 	</div>
+
+
 
 {% endblock inner-content %}
 

@@ -11,8 +11,10 @@ from django.urls import reverse_lazy
 from .forms import FamilyForm
 from .models import FamilyModel
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, FormView
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import redirect
 
 # Create your views here.
 
@@ -141,53 +143,12 @@ class DeleteFamilyView(UserPassesTestMixin, DeleteView):
         return context
 
 
-# added by autocrud
-class CreateKidView(LoginRequiredMixin, CreateView):
-    login_url = "/accounts/login"
-    model = KidModel
-    form_class = KidForm
-    template_name = "records/simple_form.html"
-    ordinals = {
-        1: "first",
-        2: "second",
-        3: "third",
-        4: "fourth",
-        5: "fifth",
-        6: "sixth",
-        7: "seventh",
-        8: "eighth",
-        9: "ninth",
-        10: "tenth",
-    }
-
-    def get_initial(self):
-        initial = super().get_initial()
-        self.family = FamilyModel.objects.get(pk=self.kwargs["family_pk"])
-        initial["family"] = self.family
-        return initial
-
-    def get_context_data(self):
-        context = super().get_context_data()
-        context["page_title"] = "Create a new Kid"
-        context["app_name"] = "records"
-        context["breadcrumbs"] = ["Create a new Kid"]
-        kid_num = self.family.kidmodel_set.all().count() + 1
-        context["header"] = f"Tell us about your {self.ordinals[kid_num]} kid"
-        context["sub_header"] = "This will help you connect with other local families"
-        return context
-
-    def form_valid(self, form):
-        self.done = "done" in self.request.POST
-        print(form.cleaned_data)
-        return super().form_valid(form)
-
-    def get_success_url(self):
-        if self.done:
-            return reverse_lazy("records:familymodels")
-        return reverse_lazy(
-            "records:createkid",
-            kwargs={"family_pk": self.family.pk},
-        )
+@login_required(login_url="/accounts/login")
+def createkidview(http_request):
+    form = KidForm(http_request.POST)
+    if form.is_valid():
+        form.save()
+    return redirect("records:myfamily")
 
 
 # added by autocrud
@@ -260,7 +221,7 @@ class EditKidView(LoginRequiredMixin, UpdateView):
 class DeleteKidView(LoginRequiredMixin, DeleteView):
     login_url = "/accounts/login"
     model = KidModel
-    success_url = reverse_lazy("records:kidmodels")
+    success_url = reverse_lazy("records:myfamily")
 
     def get_context_data(self, object):
         context = super().get_context_data()
