@@ -16,16 +16,14 @@
 		<div class="col-12 mb-5 mb-lg-0">
 			<div class="card shadow text-center">
 				<!-- Header -->
-				<div class="card-header bg-white p-3" hx-get="{% url 'records:inline_edit_family' family_pk=object.pk  %}" hx-swap="outerHTML">
+				<div class="card-header bg-white p-3" hx-get="{% url 'records:inline_edit_family' family_pk=object.pk  %}" hx-swap="outerHTML show:top">
 					<div class="table-responsive-sm">
 						<table class="table table-hover">
 							<tr>
-								<td>Name</td>
-								<td>{{ object.name }}</td>
+								<td><h2>Name: {{ object.name }}</h2></td>
 							</tr>
 							<tr>
-								<td>Zip Code</td>
-								<td>{{ object.zip_code }}</td>
+								<td><h2>Zip Code: {{ object.zip_code }}</h2></td>
 							</tr>
 						</table>
 					</div>
@@ -45,10 +43,11 @@
 							</li>
 						{% endfor %}
 					</ul>
-					<div class="d-grid"><a hx-get="{% url 'records:inline_add_kid' family_pk=object.pk  %}" hx-swap="outerHTML" class="btn btn-primary animate-up-1">Add A Kid</a></div>
+					<div class="d-grid"><a hx-get="{% url 'records:inline_add_kid' family_pk=object.pk  %}" hx-swap="outerHTML show:bottom" class="btn btn-primary animate-up-1">Add A Kid</a></div>
 				</div>
 				<!-- End Content -->
 			</div>
+			<div class="d-grid"><a href="{% url 'base_app:home' %}" class="btn btn-primary animate-up-1 mt-2">Back to Home</a></div>
 		</div>
 	</div>
 

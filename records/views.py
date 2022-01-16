@@ -42,10 +42,7 @@ class CreateFamilyView(LoginRequiredMixin, CreateView):
         return initial
 
     def get_success_url(self):
-        return reverse_lazy(
-            "records:createkid",
-            kwargs={"family_pk": self.object.pk},
-        )
+        return reverse_lazy("records:myfamily")
 
 
 # added by autocrud
@@ -272,5 +269,8 @@ class MyFamilyView(LoginRequiredMixin, RedirectView):
     login_url = "/accounts/login"
 
     def get_redirect_url(self, *args, **kwargs):
-        family = FamilyModel.objects.get(user=self.request.user)
-        return reverse_lazy("records:familymodel", kwargs={"pk": family.pk})
+        try:
+            family = FamilyModel.objects.get(user=self.request.user)
+            return reverse_lazy("records:familymodel", kwargs={"pk": family.pk})
+        except FamilyModel.DoesNotExist:
+            return reverse_lazy("records:createfamily")

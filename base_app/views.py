@@ -8,7 +8,7 @@ from .forms import CreateUserForm
 
 
 def home(request):
-    return render(request, "base_app/base.html", context={"message": "hellos worlds"})
+    return render(request, "base_app/home.html")
 
 
 def create_user_view(request):

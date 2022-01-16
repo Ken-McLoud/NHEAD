@@ -15,7 +15,7 @@ class FamilyModel(models.Model):
         max_length=5,
         null=False,
     )
-    user = models.ForeignKey(User, on_delete=PROTECT, null=False)
+    user = models.OneToOneField(User, on_delete=PROTECT, null=False)
 
     def __str__(self):
         return f"{self.name} family in {self.zip_code}"
